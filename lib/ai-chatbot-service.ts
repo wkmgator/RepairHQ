@@ -130,11 +130,11 @@ export async function runChatbot(
 }
 
 // Remove 'use server' and make it a regular exported function
-export function shouldEscalateToHuman(
+export async function shouldEscalateToHuman(
   intent: ChatIntent,
   sentiment: { sentiment: string; confidence: number },
   conversationLength: number,
-): boolean {
+): Promise<boolean> {
   // Escalate if:
   // 1. Low confidence in intent recognition
   if (intent.confidence < 0.7) return true
