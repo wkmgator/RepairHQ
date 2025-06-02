@@ -9,7 +9,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { locales, localeMetadata } from "@/lib/i18n"
 import { useIsRtl } from "@/lib/rtl-utils"
 
-export default function LanguageSwitcher() {
+export function LanguageSwitcher() {
   const router = useRouter()
   const pathname = usePathname()
   const locale = useLocale()

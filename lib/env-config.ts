@@ -20,3 +20,13 @@ export const env = createEnv({
   runtimeEnv: process.env,
   emptyStringAsUndefined: true,
 })
+
+export function getEnv() {
+  return env
+}
+
+export function validateEnv() {
+  // Validation happens when `createEnv` is called.
+  // This function confirms that `env` object is the validated environment.
+  return env
+}

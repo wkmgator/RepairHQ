@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js"
+import { createClient as createSupabaseLibClient } from "@supabase/supabase-js"
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
 import type { Database } from "./supabase-types"
 
@@ -8,23 +8,28 @@ export const createServerSupabaseClient = () => {
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
   if (!supabaseUrl || !supabaseKey) {
-    throw new Error("Missing Supabase environment variables")
+    throw new Error("Missing Supabase environment variables for server client")
   }
 
-  return createClient<Database>(supabaseUrl, supabaseKey)
+  return createSupabaseLibClient<Database>(supabaseUrl, supabaseKey)
 }
 
 // For client components (singleton pattern)
-let clientSupabase: ReturnType<typeof createClientComponentClient<Database>> | null = null
+let clientSupabaseInstance: ReturnType<typeof createClientComponentClient<Database>> | null = null
 
 export const getClientSupabaseClient = () => {
-  if (!clientSupabase) {
-    clientSupabase = createClientComponentClient<Database>()
+  if (!clientSupabaseInstance) {
+    // NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are used by createClientComponentClient by default
+    clientSupabaseInstance = createClientComponentClient<Database>()
   }
-  return clientSupabase
+  return clientSupabaseInstance
+}
+
+export const createClient = () => {
+  return getClientSupabaseClient()
 }
 
 // Reset client (useful for testing)
 export const resetClientSupabase = () => {
-  clientSupabase = null
+  clientSupabaseInstance = null
 }
